@@ -12,6 +12,41 @@ function generarMatriz() {
     }
 }
 
+// Función recursiva para dividir una fila por el pivote
+function dividirFila(matriz, fila, divisor, columna, n) {
+    if (columna === n) return;
+    matriz[fila][columna] /= divisor;
+    dividirFila(matriz, fila, divisor, columna + 1, n);
+}
+
+// Función recursiva para eliminar valores en otras filas
+function eliminarValores(matriz, filaActual, filaObjetivo, columna, n, factor) {
+    if (columna === n) return;
+    matriz[filaObjetivo][columna] -= factor * matriz[filaActual][columna];
+    eliminarValores(matriz, filaActual, filaObjetivo, columna + 1, n, factor);
+}
+
+// Función recursiva para recorrer las filas y aplicar Gauss-Jordan
+function gaussJordanRecursivo(matriz, fila, n) {
+    if (fila === n) return; // Caso base: cuando hemos procesado todas las filas
+
+    let pivot = matriz[fila][fila];
+    dividirFila(matriz, fila, pivot, 0, n); // Normalizar la fila actual
+
+    function eliminarColumnas(filaObjetivo) {
+        if (filaObjetivo === n) return;
+        if (filaObjetivo !== fila) {
+            let factor = matriz[filaObjetivo][fila];
+            eliminarValores(matriz, fila, filaObjetivo, 0, n, factor);
+        }
+        eliminarColumnas(filaObjetivo + 1);
+    }
+
+    eliminarColumnas(0); // Eliminar elementos de otras filas
+
+    gaussJordanRecursivo(matriz, fila + 1, n); // Llamada recursiva para la siguiente fila
+}
+
 // Aplicar el método de Gauss-Jordan para convertir la matriz en una matriz identidad
 function aplicarGaussJordan() {
     const n = parseInt(document.getElementById('n').value);
@@ -26,22 +61,8 @@ function aplicarGaussJordan() {
         matriz.push(fila);
     }
 
-    // Aplicar el método de Gauss-Jordan
-    for (let i = 0; i < n; i++) {
-        let pivot = matriz[i][i];
-        for (let j = 0; j < n; j++) {
-            matriz[i][j] /= pivot;
-        }
-
-        for (let k = 0; k < n; k++) {
-            if (k !== i) {
-                let factor = matriz[k][i];
-                for (let j = 0; j < n; j++) {
-                    matriz[k][j] -= factor * matriz[i][j];
-                }
-            }
-        }
-    }
+    // Aplicar el método de Gauss-Jordan usando recursividad
+    gaussJordanRecursivo(matriz, 0, n);
 
     // Mostrar la matriz resultante en los inputs sin decimales
     for (let i = 0; i < n; i++) {
