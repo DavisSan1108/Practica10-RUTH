@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matriz Diagonal</title>
+    <title>Actividad 10</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Matriz Cuadrada con Diagonal de 1's</h1>
-        <div class="form-group">
-            <label for="n">Tamaño de la matriz (n x n):</label>
-            <input type="number" id="n" min="2" max="10" value="3" required>
+        <h1>Matriz </h1>
+        <div class="input-area">
+            <input type="number" id="n" placeholder="Tamaño de la matriz (n)" min="1" max="10">
+            <button onclick="generarMatriz()">Generar Matriz</button>
+            <button onclick="aplicarGaussJordan()">Aplicar Gauss-Jordan</button>
         </div>
-        <button onclick="generarMatriz()">Generar Matriz</button>
-        <div id="matriz" class="matrix"></div>
+        <div id="matriz" class="matriz"></div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
